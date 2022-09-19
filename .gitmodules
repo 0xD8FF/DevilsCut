@@ -4,3 +4,6 @@
 [submodule "lib/openzeppelin-contracts"]
 	path = lib/openzeppelin-contracts
 	url = https://github.com/Openzeppelin/openzeppelin-contracts
+[submodule "lib/dbs-ghouls"]
+	path = lib/dbs-ghouls
+	url = https://github.com/uint160xffff/dbs-ghouls
