@@ -4,9 +4,9 @@ pragma solidity ^0.8.15;
 import "forge-std/Script.sol";
 import {GhoulsRoyalties} from "dbs-ghouls/src/GhoulsRoyalties.sol";
 import {Ghouls} from "dbs-ghouls/src/Ghouls.sol";
-import {GhoulsShares} from "../src/GhoulsShares.sol";
+import {DevilsCut} from "../src/DevilsCut.sol";
 
-contract GhoulsScript is Script {
+contract DevilsCutScript is Script {
     function setUp() public {}
 
     string public constant baseUri = "ipfs://temporary";
@@ -37,7 +37,7 @@ contract GhoulsScript is Script {
         //     })
         // );
 
-        GhoulsShares shares = new GhoulsShares((1501501502e10), address(0x69d065Bc7da4f2BeD652E9c3101BE2Ffb2c9220A));
+        DevilsCut shares = new DevilsCut((0.1501501501501501e16), address(0xD52356C745C562db6cD9208D2b177E80893b6305));
 
         vm.stopBroadcast();
     }
