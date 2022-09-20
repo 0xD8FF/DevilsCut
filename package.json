@@ -1,0 +1,19 @@
+{
+  "name": "ghoul-shares",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/uint160xffff/DevilsCut.git",
+  "author": "0xffff <u16_0xffff@protonmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@ethersproject/providers": "^5.7.1",
+    "@typechain/ethers-v5": "^10.1.0",
+    "ethers": "^5.7.1",
+    "typechain": "^8.1.0",
+    "typescript": "^4.8.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "types": "typechain --target ethers-v5 \"out/**/!(*.t|test|Test|Script|script|Vm|console|console2).sol/!(*.abi).json\" --out-dir types && tsc"
+  }
+}
