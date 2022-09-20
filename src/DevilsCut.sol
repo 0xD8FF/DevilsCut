@@ -68,8 +68,8 @@ import "openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
 import "dbs-ghouls/src/Ghouls.sol";
 
 contract DevilsCut is Context, Ownable, ReentrancyGuard {
-    event PaymentReleased(address to, uint256 amount);
-    event ERC20PaymentReleased(IERC20 indexed token, address to, uint256 amount);
+    event PaymentReleased(address to, uint256 amount, uint256 tokenId);
+    event ERC20PaymentReleased(IERC20 indexed token, address to, uint256 amount, uint256 tokenId);
     event PaymentReceived(address from, uint256 amount);
 
     Ghouls public immutable ghouls;
@@ -150,7 +150,7 @@ contract DevilsCut is Context, Ownable, ReentrancyGuard {
             }
 
             Address.sendValue(payable(account), payment);
-            emit PaymentReleased(account, payment);
+            emit PaymentReleased(account, payment, tokenId);
         }
     }
 
@@ -168,7 +168,7 @@ contract DevilsCut is Context, Ownable, ReentrancyGuard {
                 _erc20ReleasedByTokenId[token][tokenId] += payment;
             }
             SafeERC20.safeTransfer(token, account, payment);
-            emit ERC20PaymentReleased(token, account, payment);
+            emit ERC20PaymentReleased(token, account, payment, tokenId);
         }
     }
 
