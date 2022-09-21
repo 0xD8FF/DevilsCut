@@ -127,9 +127,9 @@ export interface WETHInterface extends utils.Interface {
 }
 
 export interface ApprovalEventObject {
-  src: string;
-  guy: string;
-  wad: BigNumber;
+  owner: string;
+  spender: string;
+  value: BigNumber;
 }
 export type ApprovalEvent = TypedEvent<
   [string, string, BigNumber],
@@ -147,9 +147,9 @@ export type DepositEvent = TypedEvent<[string, BigNumber], DepositEventObject>;
 export type DepositEventFilter = TypedEventFilter<DepositEvent>;
 
 export interface TransferEventObject {
-  src: string;
-  dst: string;
-  wad: BigNumber;
+  from: string;
+  to: string;
+  value: BigNumber;
 }
 export type TransferEvent = TypedEvent<
   [string, string, BigNumber],
@@ -340,14 +340,14 @@ export interface WETH extends BaseContract {
 
   filters: {
     "Approval(address,address,uint256)"(
-      src?: PromiseOrValue<string> | null,
-      guy?: PromiseOrValue<string> | null,
-      wad?: null
+      owner?: PromiseOrValue<string> | null,
+      spender?: PromiseOrValue<string> | null,
+      value?: null
     ): ApprovalEventFilter;
     Approval(
-      src?: PromiseOrValue<string> | null,
-      guy?: PromiseOrValue<string> | null,
-      wad?: null
+      owner?: PromiseOrValue<string> | null,
+      spender?: PromiseOrValue<string> | null,
+      value?: null
     ): ApprovalEventFilter;
 
     "Deposit(address,uint256)"(
@@ -360,14 +360,14 @@ export interface WETH extends BaseContract {
     ): DepositEventFilter;
 
     "Transfer(address,address,uint256)"(
-      src?: PromiseOrValue<string> | null,
-      dst?: PromiseOrValue<string> | null,
-      wad?: null
+      from?: PromiseOrValue<string> | null,
+      to?: PromiseOrValue<string> | null,
+      value?: null
     ): TransferEventFilter;
     Transfer(
-      src?: PromiseOrValue<string> | null,
-      dst?: PromiseOrValue<string> | null,
-      wad?: null
+      from?: PromiseOrValue<string> | null,
+      to?: PromiseOrValue<string> | null,
+      value?: null
     ): TransferEventFilter;
 
     "Withdrawal(address,uint256)"(
