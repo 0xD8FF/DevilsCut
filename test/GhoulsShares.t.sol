@@ -112,6 +112,25 @@ contract DevilsCutTest is Test {
         assertEq(devilsCut.totalReleased(), TOKEN_SHARE * tokens.length);
     }
 
+    function test_erc20Release() public dropNFTs {
+        assertEq(devilsCut.totalReleased(weth), 0);
+        vm.deal(payable(address(devilsCut)), 1 ether);
+        vm.startPrank(address(devilsCut));
+        assertEq(weth.balanceOf(address(devilsCut)), 0);
+        weth.deposit{value: 1 ether}();
+        assertEq(weth.balanceOf(address(devilsCut)), 1 ether);
+        vm.stopPrank();
+
+        uint256[] memory tokens = new uint256[](5);
+        tokens[0] = 1;
+        tokens[1] = 2;
+        tokens[2] = 3;
+        tokens[3] = 4;
+        tokens[4] = 5;
+        devilsCut.release(tokens, weth);
+        assertEq(devilsCut.totalReleased(weth), TOKEN_SHARE * tokens.length);
+    }
+
     function test_totalReleasedCorrectAmount() public dropNFTs {
         assertEq(devilsCut.totalReleased(), 0);
         vm.deal(payable(address(devilsCut)), 1 ether);
