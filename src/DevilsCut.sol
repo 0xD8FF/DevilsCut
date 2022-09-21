@@ -68,7 +68,7 @@ import "openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
 import "dbs-ghouls/src/Ghouls.sol";
 
 contract DevilsCut is Context, Ownable, ReentrancyGuard {
-    event PaymentReleased(address to, uint256 amount, uint256 tokenId);
+    event PaymentReleased(address to, uint256 amount);
     event ERC20PaymentReleased(IERC20 indexed token, address to, uint256 amount, uint256 tokenId);
     event PaymentReceived(address from, uint256 amount);
 
@@ -138,38 +138,53 @@ contract DevilsCut is Context, Ownable, ReentrancyGuard {
     function release(uint256[] calldata ids) public nonReentrant {
         for (uint256 i = 0; i < ids.length; i++) {
             uint256 tokenId = ids[i];
-            address account = ghouls.ownerOf(tokenId);
-
-            uint256 payment = releasable(tokenId);
-
-            require(payment != 0, "DCut: payment already released");
-
-            _totalReleased += payment;
-            unchecked {
-                _releasedByTokenId[tokenId] += payment;
-            }
-
-            Address.sendValue(payable(account), payment);
-            emit PaymentReleased(account, payment, tokenId);
+            _release(tokenId);
         }
+    }
+
+    function release(uint256 tokenId) public nonReentrant {
+        return _release(tokenId);
     }
 
     function release(uint256[] calldata ids, IERC20 token) public nonReentrant {
         for (uint256 i = 0; i < ids.length; i++) {
             uint256 tokenId = ids[i];
-            address account = ghouls.ownerOf(tokenId);
-
-            uint256 payment = releasable(token, tokenId);
-
-            require(payment != 0, "DCut: payment already released");
-
-            _erc20TotalReleased[token] += payment;
-            unchecked {
-                _erc20ReleasedByTokenId[token][tokenId] += payment;
-            }
-            SafeERC20.safeTransfer(token, account, payment);
-            emit ERC20PaymentReleased(token, account, payment, tokenId);
+            _release(tokenId, token);
         }
+    }
+
+    function release(uint256 tokenId, IERC20 token) public nonReentrant {
+        return _release(tokenId, token);
+    }
+
+    function _release(uint256 tokenId) private {
+        address account = ghouls.ownerOf(tokenId);
+
+        uint256 payment = releasable(tokenId);
+
+        require(payment != 0, "DCut: payment already released");
+
+        _totalReleased += payment;
+        unchecked {
+            _releasedByTokenId[tokenId] += payment;
+        }
+        Address.sendValue(payable(account), payment);
+        emit PaymentReleased(account, payment);
+    }
+
+    function _release(uint256 tokenId, IERC20 token) private {
+        address account = ghouls.ownerOf(tokenId);
+
+        uint256 payment = releasable(token, tokenId);
+
+        require(payment != 0, "DCut: payment already released");
+
+        _erc20TotalReleased[token] += payment;
+        unchecked {
+            _erc20ReleasedByTokenId[token][tokenId] += payment;
+        }
+        SafeERC20.safeTransfer(token, account, payment);
+        emit ERC20PaymentReleased(token, account, payment, tokenId);
     }
 
     // =========================================================================

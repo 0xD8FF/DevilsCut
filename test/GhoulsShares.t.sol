@@ -156,4 +156,24 @@ contract DevilsCutTest is Test {
         vm.expectRevert("DCut: payment already released");
         devilsCut.release(tokens2);
     }
+
+    function test_releaseSingleToken() public dropNFTs {
+        assertEq(devilsCut.totalReleased(), 0);
+        vm.deal(payable(address(devilsCut)), 1 ether);
+        assertEq(devilsCut.totalReleased(), 0);
+        devilsCut.release(1);
+        assertEq(devilsCut.totalReleased(), TOKEN_SHARE * 1);
+    }
+
+    function test_releaseSingleTofken5x() public dropNFTs {
+        assertEq(devilsCut.totalReleased(), 0);
+        vm.deal(payable(address(devilsCut)), 1 ether);
+        assertEq(devilsCut.totalReleased(), 0);
+        devilsCut.release(1);
+        devilsCut.release(2);
+        devilsCut.release(3);
+        devilsCut.release(4);
+        devilsCut.release(5);
+        assertEq(devilsCut.totalReleased(), TOKEN_SHARE * 5);
+    }
 }
