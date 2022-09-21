@@ -69,7 +69,7 @@ import "dbs-ghouls/src/Ghouls.sol";
 
 contract DevilsCut is Context, Ownable, ReentrancyGuard {
     event PaymentReleased(address to, uint256 amount);
-    event ERC20PaymentReleased(IERC20 indexed token, address to, uint256 amount, uint256 tokenId);
+    event ERC20PaymentReleased(IERC20 indexed token, address to, uint256 amount);
     event PaymentReceived(address from, uint256 amount);
 
     Ghouls public immutable ghouls;
@@ -121,10 +121,29 @@ contract DevilsCut is Context, Ownable, ReentrancyGuard {
         return _pendingPayment(totalReceived, released(tokenId));
     }
 
+    function releasable(uint256 tokenId, uint256 sumPayments) public view returns (uint256) {
+        require(tokenId < 667, "DevilsCut: tokenId invalid");
+        require(tokenId > 0, "DevilsCut: tokenId invalid");
+        uint256 totalReceived = address(this).balance - sumPayments + totalReleased();
+        return _pendingPayment(totalReceived, released(tokenId));
+    }
+
     function releasable(IERC20 token, uint256 tokenId) public view returns (uint256) {
         require(tokenId < 667, "DevilsCut: tokenId invalid");
         require(tokenId > 0, "DevilsCut: tokenId invalid");
         uint256 totalReceived = token.balanceOf(address(this)) + totalReleased(token);
+        return _pendingPayment(totalReceived, released(token, tokenId));
+    }
+
+    function releasable(
+        IERC20 token,
+        uint256 tokenId,
+        uint256 sumPayments
+    ) public view returns (uint256) {
+        require(tokenId < 667, "DevilsCut: tokenId invalid");
+        require(tokenId > 0, "DevilsCut: tokenId invalid");
+        require(token.balanceOf(address(this)) > 0, "DevilsCut: no token balance");
+        uint256 totalReceived = token.balanceOf(address(this)) - sumPayments + totalReleased(token);
         return _pendingPayment(totalReceived, released(token, tokenId));
     }
 
@@ -135,29 +154,51 @@ contract DevilsCut is Context, Ownable, ReentrancyGuard {
     // =========================================================================
     //                           The Stuff of Nightmares
     // =========================================================================
-    function release(uint256[] calldata ids) public nonReentrant {
+    function release(uint256[] calldata ids, address to) public nonReentrant {
+        uint256 sumPayments;
         for (uint256 i = 0; i < ids.length; i++) {
             uint256 tokenId = ids[i];
-            _release(tokenId);
+            require(to == ghouls.ownerOf(tokenId), "DCut: batch release to nonowner");
+
+            uint256 payment = releasable(tokenId, sumPayments);
+
+            require(payment != 0, "DCut: payment already released");
+
+            _totalReleased += payment;
+            unchecked {
+                _releasedByTokenId[tokenId] += payment;
+            }
+            sumPayments += payment;
         }
+        Address.sendValue(payable(to), sumPayments);
+        emit PaymentReleased(to, sumPayments);
+    }
+
+    function release(
+        uint256[] calldata ids,
+        IERC20 token,
+        address to
+    ) public nonReentrant {
+        uint256 sumPayments;
+        for (uint256 i = 0; i < ids.length; i++) {
+            uint256 tokenId = ids[i];
+            require(to == ghouls.ownerOf(tokenId), "DCut: batch release to nonowner");
+
+            uint256 payment = releasable(token, tokenId, sumPayments);
+
+            require(payment != 0, "DCut: payment already released");
+
+            _erc20TotalReleased[token] += payment;
+            unchecked {
+                _erc20ReleasedByTokenId[token][tokenId] += payment;
+            }
+            sumPayments += payment;
+        }
+        SafeERC20.safeTransfer(token, to, sumPayments);
+        emit ERC20PaymentReleased(token, to, sumPayments);
     }
 
     function release(uint256 tokenId) public nonReentrant {
-        return _release(tokenId);
-    }
-
-    function release(uint256[] calldata ids, IERC20 token) public nonReentrant {
-        for (uint256 i = 0; i < ids.length; i++) {
-            uint256 tokenId = ids[i];
-            _release(tokenId, token);
-        }
-    }
-
-    function release(uint256 tokenId, IERC20 token) public nonReentrant {
-        return _release(tokenId, token);
-    }
-
-    function _release(uint256 tokenId) private {
         address account = ghouls.ownerOf(tokenId);
 
         uint256 payment = releasable(tokenId);
@@ -172,7 +213,7 @@ contract DevilsCut is Context, Ownable, ReentrancyGuard {
         emit PaymentReleased(account, payment);
     }
 
-    function _release(uint256 tokenId, IERC20 token) private {
+    function release(uint256 tokenId, IERC20 token) public nonReentrant {
         address account = ghouls.ownerOf(tokenId);
 
         uint256 payment = releasable(token, tokenId);
@@ -184,7 +225,7 @@ contract DevilsCut is Context, Ownable, ReentrancyGuard {
             _erc20ReleasedByTokenId[token][tokenId] += payment;
         }
         SafeERC20.safeTransfer(token, account, payment);
-        emit ERC20PaymentReleased(token, account, payment, tokenId);
+        emit ERC20PaymentReleased(token, account, payment);
     }
 
     // =========================================================================

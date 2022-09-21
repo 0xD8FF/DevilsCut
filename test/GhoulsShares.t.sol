@@ -51,7 +51,6 @@ contract DevilsCutTest is Test {
                 allowlistMerkleRoot: bytes32(0)
             })
         );
-        console.log(TOKEN_SHARE);
         weth = new WETH();
         devilsCut = new DevilsCut((TOKEN_SHARE), address(ghoulsNFTBase));
         ghoulsNFTBase.transferOwnership(DEFAULT_OWNER_ADDRESS);
@@ -79,10 +78,10 @@ contract DevilsCutTest is Test {
     function test_releaseCorrectAmount() public dropNFTs {
         vm.deal(payable(address(devilsCut)), 1 ether);
         uint256[] memory tokens = new uint256[](1);
-        tokens[0] = 1;
+        // tokens[0] = 1;
         vm.deal(TEST_USER1, 1 ether);
         vm.prank(TEST_USER1);
-        devilsCut.release(tokens);
+        devilsCut.release(1);
         assertEq(devilsCut.totalReleased(), TOKEN_SHARE * tokens.length);
     }
 
@@ -108,7 +107,7 @@ contract DevilsCutTest is Test {
         tokens[2] = 3;
         tokens[3] = 4;
         tokens[4] = 5;
-        devilsCut.release(tokens);
+        devilsCut.release(tokens, TEST_USER1);
         assertEq(devilsCut.totalReleased(), TOKEN_SHARE * tokens.length);
     }
 
@@ -127,7 +126,7 @@ contract DevilsCutTest is Test {
         tokens[2] = 3;
         tokens[3] = 4;
         tokens[4] = 5;
-        devilsCut.release(tokens, weth);
+        devilsCut.release(tokens, weth, TEST_USER1);
         assertEq(devilsCut.totalReleased(weth), TOKEN_SHARE * tokens.length);
     }
 
@@ -136,8 +135,8 @@ contract DevilsCutTest is Test {
         vm.deal(payable(address(devilsCut)), 1 ether);
         assertEq(devilsCut.totalReleased(), 0);
         uint256[] memory tokens = new uint256[](1);
-        tokens[0] = 1;
-        devilsCut.release(tokens);
+        // tokens[0] = 1;
+        devilsCut.release(1);
         assertEq(devilsCut.totalReleased(), TOKEN_SHARE * tokens.length);
     }
 
@@ -146,15 +145,15 @@ contract DevilsCutTest is Test {
         vm.deal(payable(address(devilsCut)), 1 ether);
         assertEq(devilsCut.totalReleased(), 0);
         uint256[] memory tokens = new uint256[](1);
-        tokens[0] = 1;
-        devilsCut.release(tokens);
+        // tokens[0] = 1;
+        devilsCut.release(1);
         assertEq(devilsCut.totalReleased(), TOKEN_SHARE * tokens.length);
         uint256[] memory tokens2 = new uint256[](3);
         tokens2[0] = 1;
         tokens2[1] = 2;
         tokens2[2] = 3;
         vm.expectRevert("DCut: payment already released");
-        devilsCut.release(tokens2);
+        devilsCut.release(tokens2, TEST_USER1);
     }
 
     function test_releaseSingleToken() public dropNFTs {
