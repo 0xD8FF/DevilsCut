@@ -34,9 +34,11 @@ export interface DevilsCutInterface extends utils.Interface {
     "ghouls()": FunctionFragment;
     "owner()": FunctionFragment;
     "releasable(address,uint256)": FunctionFragment;
+    "releasable(uint256,uint256)": FunctionFragment;
+    "releasable(address,uint256,uint256)": FunctionFragment;
     "releasable(uint256)": FunctionFragment;
     "release(uint256)": FunctionFragment;
-    "release(uint256[])": FunctionFragment;
+    "release(uint256[],address,address)": FunctionFragment;
     "release(uint256,address)": FunctionFragment;
     "release(uint256[],address)": FunctionFragment;
     "released(uint256)": FunctionFragment;
@@ -56,9 +58,11 @@ export interface DevilsCutInterface extends utils.Interface {
       | "ghouls"
       | "owner"
       | "releasable(address,uint256)"
+      | "releasable(uint256,uint256)"
+      | "releasable(address,uint256,uint256)"
       | "releasable(uint256)"
       | "release(uint256)"
-      | "release(uint256[])"
+      | "release(uint256[],address,address)"
       | "release(uint256,address)"
       | "release(uint256[],address)"
       | "released(uint256)"
@@ -86,6 +90,18 @@ export interface DevilsCutInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "releasable(uint256,uint256)",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "releasable(address,uint256,uint256)",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "releasable(uint256)",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -94,8 +110,12 @@ export interface DevilsCutInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "release(uint256[])",
-    values: [PromiseOrValue<BigNumberish>[]]
+    functionFragment: "release(uint256[],address,address)",
+    values: [
+      PromiseOrValue<BigNumberish>[],
+      PromiseOrValue<string>,
+      PromiseOrValue<string>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "release(uint256,address)",
@@ -150,6 +170,14 @@ export interface DevilsCutInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "releasable(uint256,uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "releasable(address,uint256,uint256)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "releasable(uint256)",
     data: BytesLike
   ): Result;
@@ -158,7 +186,7 @@ export interface DevilsCutInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "release(uint256[])",
+    functionFragment: "release(uint256[],address,address)",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -197,7 +225,7 @@ export interface DevilsCutInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "ERC20PaymentReleased(address,address,uint256,uint256)": EventFragment;
+    "ERC20PaymentReleased(address,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "PaymentReceived(address,uint256)": EventFragment;
     "PaymentReleased(address,uint256)": EventFragment;
@@ -213,10 +241,9 @@ export interface ERC20PaymentReleasedEventObject {
   token: string;
   to: string;
   amount: BigNumber;
-  tokenId: BigNumber;
 }
 export type ERC20PaymentReleasedEvent = TypedEvent<
-  [string, string, BigNumber, BigNumber],
+  [string, string, BigNumber],
   ERC20PaymentReleasedEventObject
 >;
 
@@ -305,6 +332,19 @@ export interface DevilsCut extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    "releasable(uint256,uint256)"(
+      tokenId: PromiseOrValue<BigNumberish>,
+      sumPayments: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    "releasable(address,uint256,uint256)"(
+      token: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      sumPayments: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     "releasable(uint256)"(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -315,8 +355,10 @@ export interface DevilsCut extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    "release(uint256[])"(
+    "release(uint256[],address,address)"(
       ids: PromiseOrValue<BigNumberish>[],
+      token: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -328,7 +370,7 @@ export interface DevilsCut extends BaseContract {
 
     "release(uint256[],address)"(
       ids: PromiseOrValue<BigNumberish>[],
-      token: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -388,6 +430,19 @@ export interface DevilsCut extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  "releasable(uint256,uint256)"(
+    tokenId: PromiseOrValue<BigNumberish>,
+    sumPayments: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  "releasable(address,uint256,uint256)"(
+    token: PromiseOrValue<string>,
+    tokenId: PromiseOrValue<BigNumberish>,
+    sumPayments: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   "releasable(uint256)"(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -398,8 +453,10 @@ export interface DevilsCut extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  "release(uint256[])"(
+  "release(uint256[],address,address)"(
     ids: PromiseOrValue<BigNumberish>[],
+    token: PromiseOrValue<string>,
+    to: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -411,7 +468,7 @@ export interface DevilsCut extends BaseContract {
 
   "release(uint256[],address)"(
     ids: PromiseOrValue<BigNumberish>[],
-    token: PromiseOrValue<string>,
+    to: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -471,6 +528,19 @@ export interface DevilsCut extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    "releasable(uint256,uint256)"(
+      tokenId: PromiseOrValue<BigNumberish>,
+      sumPayments: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "releasable(address,uint256,uint256)"(
+      token: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      sumPayments: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     "releasable(uint256)"(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -481,8 +551,10 @@ export interface DevilsCut extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    "release(uint256[])"(
+    "release(uint256[],address,address)"(
       ids: PromiseOrValue<BigNumberish>[],
+      token: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -494,7 +566,7 @@ export interface DevilsCut extends BaseContract {
 
     "release(uint256[],address)"(
       ids: PromiseOrValue<BigNumberish>[],
-      token: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -532,17 +604,15 @@ export interface DevilsCut extends BaseContract {
   };
 
   filters: {
-    "ERC20PaymentReleased(address,address,uint256,uint256)"(
+    "ERC20PaymentReleased(address,address,uint256)"(
       token?: PromiseOrValue<string> | null,
       to?: null,
-      amount?: null,
-      tokenId?: null
+      amount?: null
     ): ERC20PaymentReleasedEventFilter;
     ERC20PaymentReleased(
       token?: PromiseOrValue<string> | null,
       to?: null,
-      amount?: null,
-      tokenId?: null
+      amount?: null
     ): ERC20PaymentReleasedEventFilter;
 
     "OwnershipTransferred(address,address)"(
@@ -589,6 +659,19 @@ export interface DevilsCut extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    "releasable(uint256,uint256)"(
+      tokenId: PromiseOrValue<BigNumberish>,
+      sumPayments: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "releasable(address,uint256,uint256)"(
+      token: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      sumPayments: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     "releasable(uint256)"(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -599,8 +682,10 @@ export interface DevilsCut extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    "release(uint256[])"(
+    "release(uint256[],address,address)"(
       ids: PromiseOrValue<BigNumberish>[],
+      token: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -612,7 +697,7 @@ export interface DevilsCut extends BaseContract {
 
     "release(uint256[],address)"(
       ids: PromiseOrValue<BigNumberish>[],
-      token: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -673,6 +758,19 @@ export interface DevilsCut extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    "releasable(uint256,uint256)"(
+      tokenId: PromiseOrValue<BigNumberish>,
+      sumPayments: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "releasable(address,uint256,uint256)"(
+      token: PromiseOrValue<string>,
+      tokenId: PromiseOrValue<BigNumberish>,
+      sumPayments: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     "releasable(uint256)"(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -683,8 +781,10 @@ export interface DevilsCut extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    "release(uint256[])"(
+    "release(uint256[],address,address)"(
       ids: PromiseOrValue<BigNumberish>[],
+      token: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -696,7 +796,7 @@ export interface DevilsCut extends BaseContract {
 
     "release(uint256[],address)"(
       ids: PromiseOrValue<BigNumberish>[],
-      token: PromiseOrValue<string>,
+      to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
