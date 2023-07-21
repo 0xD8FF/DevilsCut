@@ -9,10 +9,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function NavBar() {
   return (
-    <Navbar>
-      <NavbarBrand>
-        <p className="font-bold text-inherit">DC</p>
-      </NavbarBrand>
+    <Navbar shouldHideOnScroll>
       <NavbarContent
         className="hidden sm:flex gap-4"
         justify="center"

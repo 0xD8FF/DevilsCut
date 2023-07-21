@@ -3,7 +3,6 @@ import 'server-only'
 
 export async function getData(address?: string, collection?: string) {
 
-  console.log("address: ", address);
   const graphqlQuery = `
         query MyQuery {
           tokens(
@@ -37,6 +36,5 @@ export async function getData(address?: string, collection?: string) {
   }
 
   const body = await res.json();
-  console.log("body: ", body);
   return body?.data?.tokens?.nodes;
 }

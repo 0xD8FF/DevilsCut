@@ -44,8 +44,6 @@ const InfoCard: React.FC = () => {
       args: [BigInt(card.tokenId)],
     }));
 
-  console.log("InfoCard", contracts);
-
   const { data, error, isLoading, isSuccess } = useContractReads({
     contracts,
   });
@@ -82,8 +80,6 @@ const InfoCard: React.FC = () => {
       setIsSelected(true);
     }
   }
-
-  console.log("contract data: ", data);
 
   useEffect(() => {
     if (data) {
