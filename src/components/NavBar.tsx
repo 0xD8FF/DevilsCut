@@ -5,7 +5,7 @@ import {
   NavbarItem,
 } from "@nextui-org/navbar";
 import { BalanceButton } from "./BalanceButton";
-import { ConnectKitButton } from "./ConnectKitButton";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function NavBar() {
   return (
@@ -22,7 +22,7 @@ export default function NavBar() {
           <BalanceButton />
         </NavbarItem>
         <NavbarItem>
-          <ConnectKitButton />
+          <ConnectButton />
         </NavbarItem>
       </NavbarContent>
     </Navbar>

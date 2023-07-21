@@ -1,4 +1,3 @@
-export const runtime = "edge";
 import NavBar from "@/components/NavBar";
 import "./globals.css";
 import { Providers } from "./providers";

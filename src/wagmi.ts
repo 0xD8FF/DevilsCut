@@ -1,20 +1,32 @@
-import { getDefaultConfig } from 'connectkit'
-import { createConfig } from 'wagmi'
+import '@rainbow-me/rainbowkit/styles.css';
+import {
+    getDefaultWallets,
+    RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import {
+    mainnet,
+    polygon,
+    optimism,
+    arbitrum,
+    zora,
+} from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
+export const { chains, publicClient } = configureChains(
+    [mainnet],
+    [
+        publicProvider()
+    ]
+);
 
-const walletConnectProjectId = '6acb6ab59f25d8c63363d6099bfa1f15'
+const { connectors } = getDefaultWallets({
+    appName: 'DC',
+    projectId: '666',
+    chains
+});
 
-export const config = createConfig(
-    getDefaultConfig({
-        // Required API Keys
-        alchemyId: process.env.ALCHEMY_ID, // or infuraId
-        walletConnectProjectId: walletConnectProjectId,
-
-        // Required
-        appName: "DC TEST",
-
-        // Optional
-        appDescription: "Your App Description",
-        appUrl: "https://family.co", // your app's url
-        appIcon: "https://family.co/logo.png", // your app's icon, no bigger than 1024x1024px (max. 1MB)
-    }),
-)
+export const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors,
+    publicClient
+})

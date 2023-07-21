@@ -1,3 +1,5 @@
+// export const runtime = "edge";
+
 import { Connected } from "@/components/Connected";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { useAccount } from "wagmi";
