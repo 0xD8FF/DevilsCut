@@ -1,8 +1,13 @@
 import '@rainbow-me/rainbowkit/styles.css';
 import {
-    getDefaultWallets,
-    RainbowKitProvider,
+    connectorsForWallets,
 } from '@rainbow-me/rainbowkit';
+import {
+    injectedWallet,
+    rainbowWallet,
+    metaMaskWallet,
+    coinbaseWallet,
+} from '@rainbow-me/rainbowkit/wallets';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import {
     mainnet,
@@ -19,11 +24,21 @@ export const { chains, publicClient } = configureChains(
     ]
 );
 
-const { connectors } = getDefaultWallets({
-    appName: 'DC',
-    projectId: '666',
-    chains
-});
+const projectId = "DC-DEVILS-CUT"
+
+const connectors = connectorsForWallets([
+    {
+        groupName: 'Suggested',
+        wallets: [
+            injectedWallet({ chains }),
+            rainbowWallet({ projectId, chains }),
+            metaMaskWallet({ projectId, chains }),
+            coinbaseWallet({ chains, appName: 'My RainbowKit App' }),
+
+        ],
+    },
+]);
+
 
 export const wagmiConfig = createConfig({
     autoConnect: true,

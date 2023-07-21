@@ -1,4 +1,4 @@
-export const runtime = "edge";
+// export const runtime = "edge";
 import { Connected } from "@/components/Connected";
 import { useRouter } from "next/navigation";
 import React from "react";
