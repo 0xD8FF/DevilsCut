@@ -1,29 +1,33 @@
-import { create } from "domain";
-import { createContext, useReducer } from "react";
+"use client";
+import React, { createContext, useReducer } from "react";
 
-export const ItemsContext = createContext("");
-export const ItemsDispatchContext = createContext("");
+const initialState = { count: 0, sum: 0 };
 
-export function ItemsProvider({ children }: { children: React.ReactNode }) {
-  const [items, dispatch] = useReducer(reducer, initialItems);
-  return (
-    <ItemsContext.Provider value={items}>
-      <ItemsDispatchContext.Provider value={dispatch}>
-        {children}
-      </ItemsDispatchContext.Provider>
-    </ItemsContext.Provider>
-  );
-}
-
-function reducer(items, action) {
+function reducer(state, action) {
   switch (action.type) {
-    case "add":
-      return [...items, action.payload];
-    case "remove":
-      return items.filter((item) => item.tokenId !== action.payload);
+    case "increment":
+      return {
+        count: state.count + 1,
+        sum: state.sum + parseFloat(action.value),
+      };
+    case "decrement":
+      return {
+        count: state.count - 1,
+        sum: state.sum - parseFloat(action.value),
+      };
     default:
-      throw new Error("Unexpected action");
+      throw new Error();
   }
 }
 
-const initialItems: string[] = [];
+export const CardSelectionContext = createContext("");
+
+export function CardSelectionProvider({ children }) {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return (
+    <CardSelectionContext.Provider value={{ state, dispatch }}>
+      {children}
+    </CardSelectionContext.Provider>
+  );
+}

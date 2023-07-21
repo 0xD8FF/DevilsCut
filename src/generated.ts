@@ -238,37 +238,37 @@ export const devilsCutABI = [
     name: 'owner',
     outputs: [{ name: '', internalType: 'address', type: 'address' }],
   },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'token', internalType: 'contract IERC20', type: 'address' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'releasable',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-      { name: 'sumPayments', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'releasable',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'token', internalType: 'contract IERC20', type: 'address' },
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-      { name: 'sumPayments', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'releasable',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
+  // {
+  //   stateMutability: 'view',
+  //   type: 'function',
+  //   inputs: [
+  //     { name: 'token', internalType: 'contract IERC20', type: 'address' },
+  //     { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+  //   ],
+  //   name: 'releasable',
+  //   outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  // },
+  // {
+  //   stateMutability: 'view',
+  //   type: 'function',
+  //   inputs: [
+  //     { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+  //     { name: 'sumPayments', internalType: 'uint256', type: 'uint256' },
+  //   ],
+  //   name: 'releasable',
+  //   outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  // },
+  // {
+  //   stateMutability: 'view',
+  //   type: 'function',
+  //   inputs: [
+  //     { name: 'token', internalType: 'contract IERC20', type: 'address' },
+  //     { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+  //     { name: 'sumPayments', internalType: 'uint256', type: 'uint256' },
+  //   ],
+  //   name: 'releasable',
+  //   outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  // },
   {
     stateMutability: 'view',
     type: 'function',
@@ -276,34 +276,34 @@ export const devilsCutABI = [
     name: 'releasable',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
   },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
-    name: 'release',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: 'ids', internalType: 'uint256[]', type: 'uint256[]' },
-      { name: 'token', internalType: 'contract IERC20', type: 'address' },
-      { name: 'to', internalType: 'address', type: 'address' },
-    ],
-    name: 'release',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
-      { name: 'token', internalType: 'contract IERC20', type: 'address' },
-    ],
-    name: 'release',
-    outputs: [],
-  },
+  // {
+  //   stateMutability: 'nonpayable',
+  //   type: 'function',
+  //   inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+  //   name: 'release',
+  //   outputs: [],
+  // },
+  // {
+  //   stateMutability: 'nonpayable',
+  //   type: 'function',
+  //   inputs: [
+  //     { name: 'ids', internalType: 'uint256[]', type: 'uint256[]' },
+  //     { name: 'token', internalType: 'contract IERC20', type: 'address' },
+  //     { name: 'to', internalType: 'address', type: 'address' },
+  //   ],
+  //   name: 'release',
+  //   outputs: [],
+  // },
+  // {
+  //   stateMutability: 'nonpayable',
+  //   type: 'function',
+  //   inputs: [
+  //     { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+  //     { name: 'token', internalType: 'contract IERC20', type: 'address' },
+  //   ],
+  //   name: 'release',
+  //   outputs: [],
+  // },
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -539,13 +539,13 @@ export function useErc20Write<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<typeof erc20ABI, string>['request']['abi'],
-        TFunctionName,
-        TMode
-      >
+      PrepareWriteContractResult<typeof erc20ABI, string>['request']['abi'],
+      TFunctionName,
+      TMode
+    >
     : UseContractWriteConfig<typeof erc20ABI, TFunctionName, TMode> & {
-        abi?: never
-      } = {} as any,
+      abi?: never
+    } = {} as any,
 ) {
   return useContractWrite<typeof erc20ABI, TFunctionName, TMode>({
     abi: erc20ABI,
@@ -559,17 +559,17 @@ export function useErc20Write<
 export function useErc20Approve<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof erc20ABI,
-          'approve'
-        >['request']['abi'],
-        'approve',
-        TMode
-      > & { functionName?: 'approve' }
+      PrepareWriteContractResult<
+        typeof erc20ABI,
+        'approve'
+      >['request']['abi'],
+      'approve',
+      TMode
+    > & { functionName?: 'approve' }
     : UseContractWriteConfig<typeof erc20ABI, 'approve', TMode> & {
-        abi?: never
-        functionName?: 'approve'
-      } = {} as any,
+      abi?: never
+      functionName?: 'approve'
+    } = {} as any,
 ) {
   return useContractWrite<typeof erc20ABI, 'approve', TMode>({
     abi: erc20ABI,
@@ -584,17 +584,17 @@ export function useErc20Approve<TMode extends WriteContractMode = undefined>(
 export function useErc20Transfer<TMode extends WriteContractMode = undefined>(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof erc20ABI,
-          'transfer'
-        >['request']['abi'],
-        'transfer',
-        TMode
-      > & { functionName?: 'transfer' }
+      PrepareWriteContractResult<
+        typeof erc20ABI,
+        'transfer'
+      >['request']['abi'],
+      'transfer',
+      TMode
+    > & { functionName?: 'transfer' }
     : UseContractWriteConfig<typeof erc20ABI, 'transfer', TMode> & {
-        abi?: never
-        functionName?: 'transfer'
-      } = {} as any,
+      abi?: never
+      functionName?: 'transfer'
+    } = {} as any,
 ) {
   return useContractWrite<typeof erc20ABI, 'transfer', TMode>({
     abi: erc20ABI,
@@ -611,17 +611,17 @@ export function useErc20TransferFrom<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof erc20ABI,
-          'transferFrom'
-        >['request']['abi'],
-        'transferFrom',
-        TMode
-      > & { functionName?: 'transferFrom' }
+      PrepareWriteContractResult<
+        typeof erc20ABI,
+        'transferFrom'
+      >['request']['abi'],
+      'transferFrom',
+      TMode
+    > & { functionName?: 'transferFrom' }
     : UseContractWriteConfig<typeof erc20ABI, 'transferFrom', TMode> & {
-        abi?: never
-        functionName?: 'transferFrom'
-      } = {} as any,
+      abi?: never
+      functionName?: 'transferFrom'
+    } = {} as any,
 ) {
   return useContractWrite<typeof erc20ABI, 'transferFrom', TMode>({
     abi: erc20ABI,
@@ -905,18 +905,18 @@ export function useDevilsCutWrite<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof devilsCutABI,
-          string
-        >['request']['abi'],
-        TFunctionName,
-        TMode
-      > & { address?: Address; chainId?: TChainId }
+      PrepareWriteContractResult<
+        typeof devilsCutABI,
+        string
+      >['request']['abi'],
+      TFunctionName,
+      TMode
+    > & { address?: Address; chainId?: TChainId }
     : UseContractWriteConfig<typeof devilsCutABI, TFunctionName, TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-      } = {} as any,
+      abi?: never
+      address?: never
+      chainId?: TChainId
+    } = {} as any,
 ) {
   return useContractWrite<typeof devilsCutABI, TFunctionName, TMode>({
     abi: devilsCutABI,
@@ -936,27 +936,27 @@ export function useDevilsCutEmergencyWithdraw<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof devilsCutABI,
-          'emergencyWithdraw'
-        >['request']['abi'],
-        'emergencyWithdraw',
-        TMode
-      > & {
-        address?: Address
-        chainId?: TChainId
-        functionName?: 'emergencyWithdraw'
-      }
-    : UseContractWriteConfig<
+      PrepareWriteContractResult<
         typeof devilsCutABI,
-        'emergencyWithdraw',
-        TMode
-      > & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'emergencyWithdraw'
-      } = {} as any,
+        'emergencyWithdraw'
+      >['request']['abi'],
+      'emergencyWithdraw',
+      TMode
+    > & {
+      address?: Address
+      chainId?: TChainId
+      functionName?: 'emergencyWithdraw'
+    }
+    : UseContractWriteConfig<
+      typeof devilsCutABI,
+      'emergencyWithdraw',
+      TMode
+    > & {
+      abi?: never
+      address?: never
+      chainId?: TChainId
+      functionName?: 'emergencyWithdraw'
+    } = {} as any,
 ) {
   return useContractWrite<typeof devilsCutABI, 'emergencyWithdraw', TMode>({
     abi: devilsCutABI,
@@ -977,19 +977,19 @@ export function useDevilsCutRelease<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof devilsCutABI,
-          'release'
-        >['request']['abi'],
-        'release',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'release' }
+      PrepareWriteContractResult<
+        typeof devilsCutABI,
+        'release'
+      >['request']['abi'],
+      'release',
+      TMode
+    > & { address?: Address; chainId?: TChainId; functionName?: 'release' }
     : UseContractWriteConfig<typeof devilsCutABI, 'release', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'release'
-      } = {} as any,
+      abi?: never
+      address?: never
+      chainId?: TChainId
+      functionName?: 'release'
+    } = {} as any,
 ) {
   return useContractWrite<typeof devilsCutABI, 'release', TMode>({
     abi: devilsCutABI,
@@ -1010,27 +1010,27 @@ export function useDevilsCutRenounceOwnership<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof devilsCutABI,
-          'renounceOwnership'
-        >['request']['abi'],
-        'renounceOwnership',
-        TMode
-      > & {
-        address?: Address
-        chainId?: TChainId
-        functionName?: 'renounceOwnership'
-      }
-    : UseContractWriteConfig<
+      PrepareWriteContractResult<
         typeof devilsCutABI,
-        'renounceOwnership',
-        TMode
-      > & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'renounceOwnership'
-      } = {} as any,
+        'renounceOwnership'
+      >['request']['abi'],
+      'renounceOwnership',
+      TMode
+    > & {
+      address?: Address
+      chainId?: TChainId
+      functionName?: 'renounceOwnership'
+    }
+    : UseContractWriteConfig<
+      typeof devilsCutABI,
+      'renounceOwnership',
+      TMode
+    > & {
+      abi?: never
+      address?: never
+      chainId?: TChainId
+      functionName?: 'renounceOwnership'
+    } = {} as any,
 ) {
   return useContractWrite<typeof devilsCutABI, 'renounceOwnership', TMode>({
     abi: devilsCutABI,
@@ -1051,19 +1051,19 @@ export function useDevilsCutSetShares<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof devilsCutABI,
-          'setShares'
-        >['request']['abi'],
-        'setShares',
-        TMode
-      > & { address?: Address; chainId?: TChainId; functionName?: 'setShares' }
+      PrepareWriteContractResult<
+        typeof devilsCutABI,
+        'setShares'
+      >['request']['abi'],
+      'setShares',
+      TMode
+    > & { address?: Address; chainId?: TChainId; functionName?: 'setShares' }
     : UseContractWriteConfig<typeof devilsCutABI, 'setShares', TMode> & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'setShares'
-      } = {} as any,
+      abi?: never
+      address?: never
+      chainId?: TChainId
+      functionName?: 'setShares'
+    } = {} as any,
 ) {
   return useContractWrite<typeof devilsCutABI, 'setShares', TMode>({
     abi: devilsCutABI,
@@ -1084,27 +1084,27 @@ export function useDevilsCutTransferOwnership<
 >(
   config: TMode extends 'prepared'
     ? UseContractWriteConfig<
-        PrepareWriteContractResult<
-          typeof devilsCutABI,
-          'transferOwnership'
-        >['request']['abi'],
-        'transferOwnership',
-        TMode
-      > & {
-        address?: Address
-        chainId?: TChainId
-        functionName?: 'transferOwnership'
-      }
-    : UseContractWriteConfig<
+      PrepareWriteContractResult<
         typeof devilsCutABI,
-        'transferOwnership',
-        TMode
-      > & {
-        abi?: never
-        address?: never
-        chainId?: TChainId
-        functionName?: 'transferOwnership'
-      } = {} as any,
+        'transferOwnership'
+      >['request']['abi'],
+      'transferOwnership',
+      TMode
+    > & {
+      address?: Address
+      chainId?: TChainId
+      functionName?: 'transferOwnership'
+    }
+    : UseContractWriteConfig<
+      typeof devilsCutABI,
+      'transferOwnership',
+      TMode
+    > & {
+      abi?: never
+      address?: never
+      chainId?: TChainId
+      functionName?: 'transferOwnership'
+    } = {} as any,
 ) {
   return useContractWrite<typeof devilsCutABI, 'transferOwnership', TMode>({
     abi: devilsCutABI,

@@ -1,63 +1,147 @@
 "use client";
 import { Card, CardBody } from "@nextui-org/card";
-import { ItemsContext, ItemsDispatchContext } from "@/context/items-context";
-import { useContext, useEffect, useState } from "react";
+import { CardSelectionContext } from "@/context/CardSelectionContext";
+import React, { useContext, useEffect } from "react";
 import {
+  devilsCutABI,
+  devilsCutConfig,
   useDevilsCutReleasable,
   useDevilsCutRelease,
   usePrepareDevilsCutRelease,
 } from "@/generated";
-import { Button } from "@nextui-org/react";
-import { toHex } from "viem";
+import { Button } from "@nextui-org/button";
+import { Switch } from "@nextui-org/switch";
+import { Address, formatEther, parseEther, stringify, toHex } from "viem";
+import {
+  paginatedIndexesConfig,
+  useAccount,
+  useContractInfiniteReads,
+  useContractReads,
+} from "wagmi";
 
-const initialState = [{ tokenId: 0, redeemable: 0, selected: false }];
+const InfoCard: React.FC = () => {
+  const context = useContext(CardSelectionContext);
 
-export default function InfoCard() {
-  const tokenId = "341";
-  // const [items, setItems] = useState(initialState);
-  const items = useContext(ItemsContext);
-  // const dispatch = useContext(ItemsDispatchContext);
-  const sumValue = items.reduce(
-    (acc, item) => acc + Number(item.redeemable),
+  if (!context) {
+    throw new Error("InfoCard must be used within a CardSelectionProvider");
+  }
+
+  const { state, dispatch } = context;
+
+  const [isSelected, setIsSelected] = React.useState(false);
+
+  const totalValue = state.selectedCards.reduce(
+    (sum, card) => (card.isSelected ? sum + parseFloat(card.value) : sum),
     0
   );
-  const { data, error } = useDevilsCutReleasable({
-    args: [BigInt(tokenId), BigInt(tokenId)],
+
+  const contracts = state.selectedCards
+    .filter((card) => card.value === "pending") // Only include selected cards
+    .map((card) => ({
+      abi: devilsCutABI,
+      address: devilsCutConfig.address[1], // Use the correct index for the address
+      functionName: "releasable",
+      args: [BigInt(card.tokenId)],
+    }));
+
+  console.log("InfoCard", contracts);
+
+  const { data, error, isLoading, isSuccess } = useContractReads({
+    contracts,
   });
 
-  const [value, setValue] = useState<bigint>();
+  const uniqueArray = (arr: any[]) => Array.from(new Set(arr));
+
+  function updateCardValues() {
+    data?.forEach((result, index) => {
+      if (result.status === "success") {
+        const tokenId = contracts[index].args[0].toString();
+        dispatch({
+          type: "updateValue",
+          tokenId: tokenId,
+          value: formatEther(result.result),
+        });
+      }
+    });
+  }
+
+  function selectAll() {
+    dispatch({ type: "selectAll" });
+  }
+
+  function deselectAll() {
+    dispatch({ type: "unselectAll" });
+  }
+
+  function handleSelectAll() {
+    if (isSelected) {
+      deselectAll();
+      setIsSelected(false);
+    } else {
+      selectAll();
+      setIsSelected(true);
+    }
+  }
+
+  console.log("contract data: ", data);
+
   useEffect(() => {
-    data && setValue(data);
+    if (data) {
+      updateCardValues();
+    }
   }, [data]);
 
-  // useEffect(() => {
-  //   if (!data) return;
-  //   dispatch({
-  //     type: "add",
-  //     payload: { tokenId, redeemable: formatEther(data), selected: false },
-  //   });
-  // }, [data, dispatch, tokenId]);
+  const { address, isConnected } = useAccount();
 
-  const { config } = usePrepareDevilsCutRelease({
-    args: items.map((item) => item.tokenId),
+  const { config, error: prepareWriteError } = usePrepareDevilsCutRelease({
+    args: [
+      uniqueArray(
+        state.selectedCards
+          .filter((card) => card.isSelected === true)
+          .map((card) => BigInt(card.tokenId))
+      ),
+      address as Address,
+    ],
   });
 
   const {
-    isLoading,
-    isSuccess,
+    isLoading: isWriteLoading,
+    isSuccess: isWriteSuccess,
     error: releaseError,
     write,
   } = useDevilsCutRelease(config);
-  return (
-    <Card className="fixed justify-content-center bottom-1 z-20">
-      <CardBody>
-        <p>{`You'll receive:`}</p>
 
-        <p key="sum">{sumValue ? sumValue : "0"}</p>
-      </CardBody>
-      <Button onPress={() => write()} isLoading={isLoading} color="secondary">
-        Release
-      </Button>
-    </Card>
+  return (
+    <div className="fixed inset-x-0 bottom-0 flex justify-center px-4 z-20">
+      {" "}
+      <Card shadow="md" radius="sm" className="w-4/12">
+        <CardBody>
+          <p>{`You'll receive:`}</p>
+          <p key="sum">{totalValue.toFixed(8)} Ether</p>{" "}
+        </CardBody>
+        <div className="flex">
+          <div className="flex flex-col gap-2">
+            <Switch
+              isSelected={isSelected}
+              onValueChange={handleSelectAll}
+              color="success"
+            >
+              Select All
+            </Switch>
+          </div>
+          <Button
+            isDisabled={!write}
+            onPress={() => write()}
+            isLoading={isWriteLoading}
+            color="secondary"
+            radius="full"
+            className="justify-center mx-auto"
+          >
+            Release
+          </Button>
+        </div>
+      </Card>
+    </div>
   );
-}
+};
+export default InfoCard;

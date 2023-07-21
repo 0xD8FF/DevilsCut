@@ -5,7 +5,7 @@ import { WagmiConfig, useAccount } from "wagmi";
 import * as React from "react";
 
 import { config } from "../wagmi";
-import { ItemsProvider } from "@/context/items-context";
+import { CardSelectionProvider } from "@/context/CardSelectionContext";
 import { useRouter } from "next/navigation";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -22,7 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             embedGoogleFonts: true,
           }}
         >
-          <ItemsProvider>{mounted && children}</ItemsProvider>
+          <CardSelectionProvider>{mounted && children}</CardSelectionProvider>
         </ConnectKitProvider>
       </WagmiConfig>
     </NextUIProvider>
