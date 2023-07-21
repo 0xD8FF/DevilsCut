@@ -1,5 +1,14 @@
 import React from "react";
-export const CheckIcon = ({ size, height, width, ...props }) => {
+export const CheckIcon = ({
+  size,
+  height,
+  width,
+  ...props
+}: {
+  size: number;
+  height: number;
+  width: number;
+}) => {
   return (
     <svg
       width={size || width || 18}

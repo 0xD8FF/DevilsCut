@@ -59,7 +59,7 @@ const InfoCard: React.FC = () => {
         dispatch({
           type: "updateValue",
           tokenId: tokenId,
-          value: formatEther(result.result),
+          value: formatEther(result.result as bigint),
         });
       }
     });
@@ -131,7 +131,7 @@ const InfoCard: React.FC = () => {
           </div>
           <Button
             isDisabled={!write}
-            onPress={() => write()}
+            onPress={() => (write ? write() : null)}
             isLoading={isWriteLoading}
             color="secondary"
             radius="full"

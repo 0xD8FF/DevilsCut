@@ -52,7 +52,7 @@ const CardItem: React.FC<CardItemProps> = ({ tokenId, key }) => {
         isOneChar
         size="lg"
         isInvisible={!isSelected}
-        content={<CheckIcon />}
+        content={<CheckIcon size={10} height={10} width={10} />}
         color="success"
         placement="top-left"
       >
