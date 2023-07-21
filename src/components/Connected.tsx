@@ -1,10 +1,15 @@
-'use client'
-
-import { useAccount } from 'wagmi'
+"use client";
+import { NextResponse } from "next/server";
+import { useAccount } from "wagmi";
+import { useRouter } from "next/navigation";
 
 export function Connected({ children }: { children: React.ReactNode }) {
-  const { isConnected } = useAccount()
+  const router = useRouter();
+  const { address, isConnected, isDisconnected } = useAccount();
 
-  if (!isConnected) return null
-  return <>{children}</>
+  console.log("Connected", address, isConnected, isDisconnected);
+
+  if (!isConnected) return null;
+  console.log("i shouldnt see this");
+  return <>{children}</>;
 }
