@@ -1,4 +1,10 @@
 // export const runtime = "edge";
+// export const unstable_allowDynamic: [
+//   "/node_modules/@wagmi/**",
+//   "/node_modules/wagmi/**",
+//   "/node_modules/@rainbow-me/rainbowkit/**",
+//   "/node_modules/@walletconnect/**"
+// ];
 
 import { Connected } from "@/components/Connected";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
