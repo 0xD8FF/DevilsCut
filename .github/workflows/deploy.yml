@@ -30,4 +30,4 @@ jobs:
         with:
           project: "afraid-robin-89"
           entrypoint: "https://deno.land/std@0.188.0/http/file_server.ts" # 📝 Update the entrypoint
-          root: "out" # 📝 Update the root
+          root: ".next/static" # 📝 Update the root
