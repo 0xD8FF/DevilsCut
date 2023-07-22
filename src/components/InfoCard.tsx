@@ -107,6 +107,8 @@ const InfoCard: React.FC = () => {
     write,
   } = useDevilsCutRelease(config);
 
+  const isDisabled = !write || totalValue === 0;
+
   return (
     <div className="fixed inset-x-0 bottom-0 flex justify-center px-4 z-20">
       {" "}
@@ -126,12 +128,13 @@ const InfoCard: React.FC = () => {
             </Switch>
           </div>
           <Button
-            isDisabled={!write}
+            isDisabled={isDisabled}
             onPress={() => (write ? write() : null)}
             isLoading={isWriteLoading}
             color="secondary"
             radius="full"
-            className="justify-center mx-auto"
+            disableRipple
+            className="justify-center mx-auto relative overflow-visible rounded-full hover:-translate-y-1 px-12 shadow-xl bg-background/30 after:content-[''] after:absolute after:rounded-full after:inset-0 after:bg-background/40 after:z-[-1] after:transition after:!duration-500 hover:after:scale-150 hover:after:opacity-0"
           >
             Release
           </Button>
