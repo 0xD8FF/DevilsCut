@@ -61,7 +61,7 @@ export default async function Home({ params }: PageProps) {
   } = await fetchGql(query);
 
   const displayData: TokensData[] = await Promise.all(
-    nodes.map((data) =>
+    nodes.map((data: { owner: string }) =>
       fetchGql(singleHolderQuery, { ownerAddresses: [data.owner] })
     )
   );
