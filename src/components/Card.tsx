@@ -6,13 +6,15 @@ import { Spinner } from "@nextui-org/spinner";
 import { Badge } from "@nextui-org/badge";
 import React, { useContext, useEffect } from "react";
 import { CheckIcon } from "./CheckIcon";
+import { useAccount } from "wagmi";
 
 interface CardItemProps {
   tokenId: string;
   key: string;
+  owner?: string;
 }
 
-const CardItem: React.FC<CardItemProps> = ({ tokenId, key }) => {
+const CardItem: React.FC<CardItemProps> = ({ tokenId, key, owner }) => {
   const context = useContext(CardSelectionContext);
 
   if (!context) {
@@ -39,19 +41,23 @@ const CardItem: React.FC<CardItemProps> = ({ tokenId, key }) => {
     }
   }
 
+  const conditionalStyle = isSelected
+    ? "absolute bg-green-400/90 top-0 border-b-1 border-green-500/50 z-10 justify-center rounded-b-none rounded-t-lg"
+    : "absolute bg-white/30 top-0 border-b-1 border-zinc-100/50 z-10 justify-center rounded-b-none rounded-t-lg";
+
   return (
     <Card
       radius="lg"
       shadow="sm"
       key={key}
       isPressable
-      onPress={handlePress}
+      onPress={owner ? undefined : handlePress}
       isFooterBlurred
     >
       <Badge
         isOneChar
         size="lg"
-        isInvisible={!isSelected}
+        isInvisible={owner ? true : !isSelected}
         content={<CheckIcon size={50} height={50} width={50} />}
         color="success"
         placement="top-left"
@@ -65,9 +71,9 @@ const CardItem: React.FC<CardItemProps> = ({ tokenId, key }) => {
             src={`https://cdn.0xffff.rip/file/ghouls/${tokenId}.png`}
           />
         </CardBody>
-        <CardFooter className="text-small justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large top-2 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-          {tokenId && (
-            <p className="text-default-900">
+        <CardFooter className={conditionalStyle}>
+          {!owner ? (
+            <p className="text-sm text-black/70  font-bold">
               <b>Reward: </b>
               {item?.value === "pending" ? (
                 <Spinner />
@@ -75,6 +81,8 @@ const CardItem: React.FC<CardItemProps> = ({ tokenId, key }) => {
                 item?.value.slice(0, 8) + " Ether"
               )}
             </p>
+          ) : (
+            <b>{owner}</b>
           )}
           #{tokenId}
         </CardFooter>

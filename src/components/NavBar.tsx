@@ -10,14 +10,12 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 export default function NavBar() {
   return (
     <Navbar shouldHideOnScroll>
-      <NavbarContent
-        className="hidden sm:flex gap-4"
-        justify="center"
-      ></NavbarContent>
-      <NavbarContent justify="end">
+      <NavbarContent className="sm:flex gap-4" justify="center">
         <NavbarItem>
           <BalanceButton />
         </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="end">
         <NavbarItem>
           <ConnectButton />
         </NavbarItem>

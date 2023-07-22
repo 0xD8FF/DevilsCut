@@ -38,3 +38,24 @@ export async function getData(address?: string, collection?: string) {
   const body = await res.json();
   return body?.data?.tokens?.nodes;
 }
+
+export async function fetchGql(query: string, variables?: Record<string, any>) {
+  const res = await fetch("https://api.zora.co/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      variables
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  const json = await res.json();
+  return json?.data;
+
+}
