@@ -2,8 +2,9 @@
 import { devilsCutAddress } from "@/generated";
 import { Button } from "@nextui-org/button";
 import { Tooltip } from "@nextui-org/tooltip";
+import router from "next/router";
 import { formatEther } from "viem";
-import { useBalance } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import type { Address } from "wagmi";
 
 export function BalanceButton() {
