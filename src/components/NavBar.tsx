@@ -17,7 +17,7 @@ export default function NavBar() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <ConnectButton />
+          <ConnectButton showBalance={false} />
         </NavbarItem>
       </NavbarContent>
     </Navbar>

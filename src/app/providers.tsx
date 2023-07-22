@@ -5,7 +5,7 @@ import * as React from "react";
 
 import { chains, wagmiConfig } from "../wagmi";
 import { CardSelectionProvider } from "@/context/CardSelectionContext";
-import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { Connected } from "@/components/Connected";
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -14,7 +14,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <NextUIProvider>
       <WagmiConfig config={wagmiConfig}>
-        <RainbowKitProvider chains={chains}>
+        <RainbowKitProvider chains={chains} theme={darkTheme()}>
           <CardSelectionProvider>
             <Connected>{mounted && children}</Connected>
           </CardSelectionProvider>
