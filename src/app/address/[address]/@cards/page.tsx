@@ -1,6 +1,7 @@
 import CardItem from "@/components/Card";
 import InfoCard from "@/components/InfoCard";
 import { getData } from "@/lib/data";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 interface ContentPageProps {
   params: {
@@ -16,14 +17,12 @@ export default async function ContentPage({ params }: ContentPageProps) {
 
   return tokens ? (
     <>
-      <div className="px-2 gap-2 grid grid-cols-2 sm:px-8 sm:grid-cols-4">
-        {tokens.map((item: { token: { tokenId: string } }, index: string) => (
-          <CardItem tokenId={item.token.tokenId} key={index} />
-        ))}
-      </div>
-      <InfoCard />
+      {tokens.map((item: { token: { tokenId: string } }, index: string) => (
+        <CardItem tokenId={item.token.tokenId} key={index} />
+      ))}
+      {/* <InfoCard /> */}
     </>
   ) : (
-    <div>baz</div>
+    <ConnectButton />
   );
 }

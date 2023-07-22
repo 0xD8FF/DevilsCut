@@ -110,9 +110,9 @@ const InfoCard: React.FC = () => {
   const isDisabled = !write || totalValue === 0;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 flex justify-center px-4 z-20">
+    <div className=" col-span-4 z-20">
       {" "}
-      <Card shadow="md" radius="sm" className="w-4/12">
+      <Card shadow="md" radius="sm">
         <CardBody>
           <p>{`You'll receive:`}</p>
           <p key="sum">{totalValue.toFixed(8)} Ether</p>{" "}
