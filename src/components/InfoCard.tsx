@@ -110,7 +110,7 @@ const InfoCard: React.FC = () => {
   const isDisabled = !write || totalValue === 0;
 
   return (
-    <div className=" col-span-4 z-20">
+    <div className="max-w-md grid">
       {" "}
       <Card shadow="md" radius="sm">
         <CardBody>

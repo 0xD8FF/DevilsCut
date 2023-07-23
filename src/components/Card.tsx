@@ -53,6 +53,7 @@ const CardItem: React.FC<CardItemProps> = ({ tokenId, key, owner }) => {
       isPressable
       onPress={owner ? undefined : handlePress}
       isFooterBlurred
+      className="col-span-6 sm:col-span-6 md:col-span-3"
     >
       <Badge
         isOneChar

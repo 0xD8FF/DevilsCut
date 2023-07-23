@@ -12,8 +12,10 @@ export default function Layout({
   return (
     <>
       <div className="flex justify-center">
-        <div className="grid max-w-[900px] grid-cols-2 md:grid-cols-4 gap-2">
-          <InfoCard />
+        <div className="grid max-w-[900px] grid-cols-12 gap-2">
+          <div className="col-span-12 justify-center flex">
+            <InfoCard />
+          </div>
           {cards}
           {children}
         </div>
