@@ -29,7 +29,11 @@ export default function NavBar() {
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>
-          <ConnectButton showBalance={false} />
+          <ConnectButton
+            showBalance={false}
+            chainStatus={{ smallScreen: "none" }}
+            accountStatus={{ largeScreen: "address", smallScreen: "address" }}
+          />
         </NavbarItem>
       </NavbarContent>
     </Navbar>
