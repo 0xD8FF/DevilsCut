@@ -89,7 +89,7 @@ const CardItem: React.FC<CardItemProps> = ({ tokenId, key, owner }) => {
             {item?.value === "pending" ? (
               <Spinner />
             ) : (
-              item?.value.slice(0, 8) + " Ether"
+              item?.value.slice(0, 8) + " ETH"
             )}
           </p>
         </CardFooter>
