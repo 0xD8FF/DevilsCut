@@ -1,7 +1,9 @@
 "use client";
-import { Card, CardBody } from "@nextui-org/card";
+import { Card, CardBody, CardHeader, CardFooter } from "@nextui-org/card";
 import { CardSelectionContext } from "@/context/CardSelectionContext";
 import React, { useContext, useEffect } from "react";
+import { Image } from "@nextui-org/image";
+import NextImage from "next/image";
 import {
   devilsCutABI,
   devilsCutConfig,
@@ -18,6 +20,7 @@ import {
   useContractInfiniteReads,
   useContractReads,
 } from "wagmi";
+import { Tooltip } from "@nextui-org/tooltip";
 
 const InfoCard: React.FC = () => {
   const context = useContext(CardSelectionContext);
@@ -110,15 +113,39 @@ const InfoCard: React.FC = () => {
   const isDisabled = !write || totalValue === 0;
 
   return (
-    <div className="max-w-md grid">
-      {" "}
-      <Card shadow="md" radius="sm">
-        <CardBody>
-          <p>{`You'll receive:`}</p>
-          <p key="sum">{totalValue.toFixed(8)} Ether</p>{" "}
-        </CardBody>
-        <div className="flex">
-          <div className="flex flex-col gap-2">
+    <Card
+      shadow="md"
+      radius="sm"
+      isFooterBlurred
+      className="h-[200px] w-full col-span-8 sm:col-span-4"
+    >
+      <CardHeader className="absolute z-10 top-1 flex-col items-start ">
+        <div className="bg-slate-950 opacity-90">
+          <p className="text-small text-white/60 uppercase font-bold">
+            Devils Cut Rewards
+          </p>
+          <h4 className="text-white/90 font-medium text-2xl">
+            {totalValue.toFixed(8)} Ether
+          </h4>
+        </div>
+      </CardHeader>
+      <Image
+        as={NextImage}
+        removeWrapper
+        isBlurred
+        alt="Relaxing app background"
+        className="z-0 w-full h-full object-cover"
+        src="/skelelogo_bw_medium_distress.png"
+        width={400}
+        height={400}
+      />
+      <CardFooter className="absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 dark:border-default-100">
+        <div className="flex flex-grow gap-2 items-center justify-evenly">
+          <div className="flex flex-col">
+            <p className="text-tiny text-white/60">Select your Ghouls to</p>
+            <p className="text-tiny text-white/60">
+              Withdraw from the Devils Cut Pool
+            </p>
             <Switch
               isSelected={isSelected}
               onValueChange={handleSelectAll}
@@ -127,20 +154,31 @@ const InfoCard: React.FC = () => {
               Select All
             </Switch>
           </div>
-          <Button
-            isDisabled={isDisabled}
-            onPress={() => (write ? write() : null)}
-            isLoading={isWriteLoading}
-            color="secondary"
-            radius="full"
-            disableRipple
-            className="justify-center mx-auto relative overflow-visible rounded-full hover:-translate-y-1 px-12 shadow-xl bg-background/30 after:content-[''] after:absolute after:rounded-full after:inset-0 after:bg-background/40 after:z-[-1] after:transition after:!duration-500 hover:after:scale-150 hover:after:opacity-0"
+          <Tooltip
+            content="To withdraw you must make a selection and be connected as the owner of these tokens"
+            placement="bottom"
+            shouldFlip
+            color="primary"
+            shadow="lg"
+            isDisabled={!isDisabled}
           >
-            Release
-          </Button>
+            <div>
+              <Button
+                isDisabled={isDisabled}
+                onPress={() => (write ? write() : null)}
+                isLoading={isWriteLoading}
+                color="secondary"
+                radius="full"
+                disableRipple
+                className="overflow-visible rounded-full hover:-translate-y-1 px-12 shadow-xl bg-background/30 after:content-[''] after:absolute after:rounded-full after:inset-0 after:bg-background/40 after:z-[-1] after:transition after:!duration-500 hover:after:scale-150 hover:after:opacity-0 hover:bg-success"
+              >
+                Withdraw
+              </Button>
+            </div>
+          </Tooltip>
         </div>
-      </Card>
-    </div>
+      </CardFooter>
+    </Card>
   );
 };
 export default InfoCard;
