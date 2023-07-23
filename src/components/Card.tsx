@@ -2,11 +2,13 @@
 import { CardSelectionContext } from "@/context/CardSelectionContext";
 import { Card, CardBody, CardFooter } from "@nextui-org/card";
 import { Image } from "@nextui-org/image";
+import NextImage from "next/image";
 import { Spinner } from "@nextui-org/spinner";
 import { Badge } from "@nextui-org/badge";
 import React, { useContext, useEffect } from "react";
 import { CheckIcon } from "./CheckIcon";
 import { useAccount } from "wagmi";
+import { Chip } from "@nextui-org/chip";
 
 interface CardItemProps {
   tokenId: string;
@@ -53,7 +55,9 @@ const CardItem: React.FC<CardItemProps> = ({ tokenId, key, owner }) => {
       isPressable
       onPress={owner ? undefined : handlePress}
       isFooterBlurred
-      className="col-span-6 sm:col-span-6 md:col-span-3"
+      className={`col-span-6 sm:col-span-6 md:col-span-3 ${
+        isSelected && "bg-success"
+      }`}
     >
       <Badge
         isOneChar
@@ -65,27 +69,29 @@ const CardItem: React.FC<CardItemProps> = ({ tokenId, key, owner }) => {
       >
         <CardBody className="overflow-visible p-0">
           <Image
+            as={NextImage}
             radius="lg"
-            width="100%"
+            width={500}
+            height={500}
             alt={tokenId}
             className="object-cover"
             src={`https://cdn.0xffff.rip/file/ghouls/${tokenId}.png`}
           />
+          <div className="py-1 px-1 flex justify-end">
+            <Chip color="default" variant="flat">
+              Ghoul #{tokenId}
+            </Chip>
+          </div>
         </CardBody>
         <CardFooter className={conditionalStyle}>
-          {!owner ? (
-            <p className="text-sm text-black/70  font-bold">
-              <b>Reward: </b>
-              {item?.value === "pending" ? (
-                <Spinner />
-              ) : (
-                item?.value.slice(0, 8) + " Ether"
-              )}
-            </p>
-          ) : (
-            <b>{owner}</b>
-          )}
-          #{tokenId}
+          <p className="text-sm text-black/70 flex-shrink-0 font-bold">
+            <b>Reward: </b>
+            {item?.value === "pending" ? (
+              <Spinner />
+            ) : (
+              item?.value.slice(0, 8) + " Ether"
+            )}
+          </p>
         </CardFooter>
       </Badge>
     </Card>

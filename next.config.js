@@ -1,6 +1,16 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.0xffff.rip",
+        port: "",
+        pathname: "/file/**",
+      },
+    ],
+  },
   webpack: (config) => {
     config.resolve.fallback = {
       fs: false,
