@@ -36,9 +36,13 @@ const CardSingleSSR: React.FC<CardItemProps> = ({ tokenId, key, owner }) => {
             />
           </CardBody>
           <CardFooter className="text-small justify-center before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large top-2 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-            <p className=" text-default-900 ">
-              {owner?.trim().slice(0, 6) + "..." + owner?.trim().slice(-4)}
-            </p>
+            <b>
+              <p className="text-small text-default-foreground">
+                {owner?.endsWith(".eth")
+                  ? owner
+                  : owner?.trim().slice(0, 6) + "..." + owner?.trim().slice(-4)}
+              </p>
+            </b>
           </CardFooter>
         </Badge>
       </Link>

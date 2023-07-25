@@ -1,6 +1,9 @@
 import { fetchGql } from "@/lib/data";
 import { PageProps } from "../../.next/types/app/layout";
 import CardSingleSSR from "@/components/CardNew";
+import { Address } from "wagmi";
+import { createPublicClient, http } from "viem";
+import { mainnet } from "viem/chains";
 
 export default async function Home({ params }: PageProps) {
   type TokenNode = {
@@ -60,10 +63,28 @@ export default async function Home({ params }: PageProps) {
     },
   } = await fetchGql(query);
 
+  const publicClient = createPublicClient({
+    chain: mainnet,
+    transport: http(),
+  });
+
   const displayData: TokensData[] = await Promise.all(
-    nodes.map((data: { owner: string }) =>
-      fetchGql(singleHolderQuery, { ownerAddresses: [data.owner] })
-    )
+    nodes.map(async (data: { owner: string }) => {
+      const tokensData = await fetchGql(singleHolderQuery, {
+        ownerAddresses: [data.owner],
+      });
+
+      for (let tokenNode of tokensData.tokens.nodes) {
+        const ensName = await publicClient.getEnsName({
+          address: tokenNode.token.owner as Address,
+        });
+        if (ensName) {
+          tokenNode.token.owner = ensName;
+        }
+      }
+
+      return tokensData;
+    })
   );
   console.log(displayData);
 
